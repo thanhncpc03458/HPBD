@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090c1e" />
+    <meta name="description" content="Một vũ trụ nhỏ được tạo nên dành riêng cho bạn." />
+    <title>Một vũ trụ nhỏ dành riêng cho bạn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Gilda+Display&family=Parisienne&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .recipient-entry{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 auto 18px;color:#aaa9bd;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+      .recipient-entry input{width:205px;border:0;border-bottom:1px solid #e7bd7777;background:transparent;color:#fff8ed;padding:10px 4px;font:18px "Cormorant Garamond";letter-spacing:0;text-align:center;outline:none;transition:border-color .3s}
+      .recipient-entry input::placeholder{color:#77798f}.recipient-entry input:focus{border-color:#e7bd77}
+      @media(max-width:430px){.recipient-entry{flex-direction:column;gap:3px;margin-bottom:20px}.recipient-entry input{width:230px}}
+      body.gate-locked{overflow:hidden}
+      #name-gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 35%,#202449,#090c1e 72%);text-align:center;transition:opacity .9s,visibility .9s}
+      #name-gate.hidden{opacity:0;visibility:hidden;pointer-events:none}
+      #birthday-app[aria-hidden="true"]{visibility:hidden}
+      .gate-content{width:min(560px,100%);animation:gate-rise 1s both}
+      .gate-content .eyebrow{margin-bottom:24px}
+      .gate-title{font:400 clamp(44px,7vw,78px)/.95 "Gilda Display";margin:0;color:#fff8ed}
+      .gate-title em{display:block;color:#e7bd77;font-family:"Cormorant Garamond";margin-top:8px}
+      .gate-copy{font:21px "Cormorant Garamond";color:#c9c8d3;margin:30px 0}
+      #gate-form{display:flex;flex-direction:column;align-items:center;gap:18px}
+      #gate-name{width:min(330px,90%);border:0;border-bottom:1px solid #e7bd77;background:transparent;color:#fff8ed;padding:12px 8px;text-align:center;outline:0;font:26px "Cormorant Garamond"}
+      #gate-name::placeholder{color:#7d7e94}
+      .gate-error{height:16px;margin:0;color:#ef9aab;font-size:11px;opacity:0;transition:.3s}
+      .gate-error.show{opacity:1}
+      @keyframes gate-rise{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:none}}
+    </style>
+  </head>
+  <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+
+    <div id="name-gate">
+      <div class="gate-content">
+        <p class="eyebrow">Một món quà nhỏ dành riêng cho bạn <span>✦</span></p>
+        <h1 class="gate-title">Trước khi mở,<em>cho mình biết tên bạn nhé.</em></h1>
+        <p class="gate-copy">Hãy nhập tên để chuyến du hành vào vũ trụ nhỏ này bắt đầu.</p>
+        <form id="gate-form">
+          <input id="gate-name" type="text" maxlength="40" placeholder="Tên của bạn" autocomplete="name" required />
+          <p class="gate-error" id="gate-error">Bạn hãy nhập tên trước khi tiếp tục nhé.</p>
+          <button class="button button-gold" type="submit">Bắt đầu khám phá <span>↗</span></button>
+        </form>
+      </div>
+    </div>
+
+    <main id="birthday-app" aria-hidden="true">
+      <section class="hero scene" id="invitation">
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+        <div class="hero-content">
+          <p class="eyebrow reveal">Một vũ trụ nhỏ dành riêng cho bạn <span>✦</span></p>
+          <h1 class="hero-title"><span class="line-reveal">Đêm nay không phải</span><span class="line-reveal">một đêm bình thường<span class="gold">...</span></span></h1>
+          <p class="hero-subtitle reveal-delay">Bởi hôm nay, một người thật đặc biệt đã được sinh ra.</p>
+          <label class="recipient-entry reveal-delay-2" for="recipient-input"><span>Tặng riêng cho</span><input id="recipient-input" type="text" maxlength="40" placeholder="Tên người nhận" autocomplete="off" /></label>
+          <button class="button button-gold reveal-delay-2" id="open-surprise">Mở món quà sinh nhật <span>↗</span></button>
+          <div class="scroll-hint reveal-delay-2"><span class="scroll-line"></span><span>Cuộn để khám phá</span></div>
+        </div>
+        <div class="hero-footer"><span>20—24</span><span class="footer-rule"></span><span>Dành cho một người không thể nào quên</span></div>
+      </section>
+
+      <section class="moment scene" id="magic">
+        <div class="section-intro">
+          <p class="eyebrow">01 / khoảnh khắc diệu kỳ</p>
+          <h2>Một bất ngờ nho nhỏ,<br /><em>được làm bằng yêu thương.</em></h2>
+        </div>
+        <div class="gift-stage">
+          <div class="gift-halo"></div>
+          <button class="gift-box" id="gift-box" aria-label="Mở hộp quà sinh nhật">
+            <span class="gift-lid"></span><span class="gift-body"></span><span class="gift-ribbon ribbon-v"></span><span class="gift-ribbon ribbon-h"></span><span class="gift-bow bow-left"></span><span class="gift-bow bow-right"></span>
+          </button>
+          <p class="gift-prompt">Chạm vào món quà để mở</p>
+        </div>
+        <div class="magic-message" id="magic-message" aria-live="polite">
+          <p class="script">Chúc mừng sinh nhật</p><h2>Người đặc biệt của tôi<span class="gold">.</span></h2><p>Đêm nay, những vì sao cũng đang chúc mừng bạn.</p>
+        </div>
+      </section>
+
+      <section class="letter scene" id="letter">
+        <div class="section-intro centered">
+          <p class="eyebrow">02 / lá thư từ trái tim</p>
+          <h2>Những lời mong rằng<br /><em>bạn sẽ luôn giữ bên mình.</em></h2>
+        </div>
+        <article class="letter-card">
+          <div class="letter-top"><span>Dành cho <strong data-recipient>bạn</strong></span><span class="letter-star">✦</span><span data-date>hôm nay</span></div>
+          <div class="letter-body">
+            <p class="script">Gửi <span data-recipient>bạn</span> thương mến,</p>
+            <p id="typewriter"></p>
+            <p class="letter-signoff">Từ tất cả yêu thương,<br /><span class="script" data-sender>Người luôn thương bạn</span></p>
+          </div>
+          <div class="letter-stamp">✦<br /><small>làm<br />bằng yêu thương</small></div>
+        </article>
+      </section>
+
+      <section class="memories scene" id="memories">
+        <div class="section-intro">
+          <p class="eyebrow">03 / những khoảnh khắc nhỏ</p>
+          <h2>Kỷ niệm bé xinh,<br /><em>cảm xúc thật lớn.</em></h2>
+        </div>
+        <div class="polaroid-grid" id="gallery"></div>
+      </section>
+
+      <section class="wishes scene" id="wishes">
+        <div class="section-intro centered">
+          <p class="eyebrow">04 / những lời chúc dành cho bạn</p>
+          <h2>Một vài điều ước<br /><em>cho hành trình sắp tới.</em></h2>
+        </div>
+        <div class="wish-grid" id="wishes-grid"></div>
+      </section>
+
+      <section class="finale scene" id="finale">
+        <div class="finale-stars"></div>
+        <div class="finale-copy">
+          <p class="eyebrow">05 / bất ngờ cuối cùng</p>
+          <h2>Hãy ước một điều,<br /><em>tâm hồn xinh đẹp.</em></h2>
+          <p class="candle-hint" id="candle-hint">Chạm vào từng ngọn nến và để điều ước bay lên.</p>
+          <div class="cake" aria-label="Bánh sinh nhật với những ngọn nến">
+            <div class="candle" data-candle><span class="flame"></span></div><div class="candle" data-candle><span class="flame"></span></div><div class="candle" data-candle><span class="flame"></span></div>
+            <div class="cake-top"></div><div class="cake-middle"></div><div class="cake-base"></div><div class="cake-plate"></div>
+          </div>
+        </div>
+        <div class="final-message" id="final-message">
+          <p class="script">Chúc mừng sinh nhật!</p>
+          <p>Mong cuộc đời bạn luôn đẹp như những vì sao trên cao.<br />Bạn xứng đáng với mọi hạnh phúc trong vũ trụ này.</p>
+          <div class="final-rule"></div>
+          <p class="closing">Có những người khiến thế giới đẹp hơn<br />chỉ bằng sự hiện diện của mình.<br /><em>Bạn là một người như thế.</em></p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="chapter-nav" aria-label="Các phần của trang">
+      <a href="#invitation" class="active" aria-label="Lời mời"></a><a href="#magic" aria-label="Khoảnh khắc diệu kỳ"></a><a href="#letter" aria-label="Lá thư"></a><a href="#memories" aria-label="Kỷ niệm"></a><a href="#wishes" aria-label="Lời chúc"></a><a href="#finale" aria-label="Bất ngờ cuối cùng"></a>
+    </nav>
+    <button class="music-toggle" id="music-toggle" aria-label="Bật hoặc tắt nhạc nền"><span class="music-bars"><i></i><i></i><i></i></span><span>Tắt nhạc</span></button>
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Xem trước kỷ niệm"><button class="lightbox-close" id="lightbox-close" aria-label="Đóng xem trước">×</button><img id="lightbox-image" alt="" /><p id="lightbox-caption"></p></div>
+    <div class="toast" id="toast" role="status"></div>
+    <audio id="background-audio" loop></audio>
+    <script src="config.js"></script><script src="script.js"></script>
+  </body>
+</html>
