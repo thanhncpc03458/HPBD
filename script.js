@@ -71,16 +71,50 @@ config.wishes.forEach((wish, index) => {
 
 const audio = $("#background-audio");
 const musicToggle = $("#music-toggle");
+let musicContext;
+let musicTimer;
+let musicPlaying = false;
 if (config.music) audio.src = config.music;
+const playBirthdayMelody = () => {
+  musicContext = musicContext || new (window.AudioContext || window.webkitAudioContext)();
+  const notes = [261.63, 329.63, 392, 523.25, 392, 329.63, 293.66, 349.23, 440, 587.33, 440, 349.23, 329.63, 392, 493.88, 659.25, 493.88, 392];
+  const start = musicContext.currentTime + 0.05;
+  notes.forEach((frequency, index) => {
+    const oscillator = musicContext.createOscillator();
+    const gain = musicContext.createGain();
+    const time = start + index * 0.28;
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(0.09, time + 0.025);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+    oscillator.connect(gain).connect(musicContext.destination);
+    oscillator.start(time);
+    oscillator.stop(time + 0.26);
+  });
+  musicTimer = window.setTimeout(() => { if (musicPlaying) playBirthdayMelody(); }, notes.length * 280);
+};
+const stopBirthdayMelody = () => {
+  window.clearTimeout(musicTimer);
+  if (musicContext) musicContext.suspend();
+};
 musicToggle.addEventListener("click", () => {
-  if (!config.music) {
-    $("#toast").textContent = "Hãy thêm đường dẫn nhạc trong config.js để bật âm thanh.";
-    $("#toast").classList.add("show");
-    setTimeout(() => $("#toast").classList.remove("show"), 2800);
+  if (config.music) {
+    if (audio.paused) { audio.play(); musicToggle.classList.add("playing"); musicToggle.querySelector("span:last-child").textContent = "Bật nhạc"; }
+    else { audio.pause(); musicToggle.classList.remove("playing"); musicToggle.querySelector("span:last-child").textContent = "Tắt nhạc"; }
     return;
   }
-  if (audio.paused) { audio.play(); musicToggle.classList.add("playing"); musicToggle.querySelector("span:last-child").textContent = "Bật nhạc"; }
-  else { audio.pause(); musicToggle.classList.remove("playing"); musicToggle.querySelector("span:last-child").textContent = "Tắt nhạc"; }
+  musicPlaying = !musicPlaying;
+  if (musicPlaying) {
+    if (musicContext?.state === "suspended") musicContext.resume();
+    playBirthdayMelody();
+    musicToggle.classList.add("playing");
+    musicToggle.querySelector("span:last-child").textContent = "Tắt nhạc";
+  } else {
+    stopBirthdayMelody();
+    musicToggle.classList.remove("playing");
+    musicToggle.querySelector("span:last-child").textContent = "Bật nhạc";
+  }
 });
 
 const canvas = $("#starfield"), ctx = canvas.getContext("2d");

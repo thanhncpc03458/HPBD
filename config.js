@@ -4,7 +4,7 @@ window.BIRTHDAY_CONFIG = {
   age: "",
   birthday: "hôm nay",
   sender: "Người luôn thương bạn",
-  music: "https://stream.nct.vn/Believe_Audio98/HappyBirthdayToYouInstrumental-LynneMusicProject-7776546.mp3?st=RUsTzgUJWwLILnC-fsKVDg&e=1795740976&a=6&p=0&r=b6024ae97a30a55c688831171ba0e0c6", // Nguồn lấy từ liên kết Nhaccuatui bạn cung cấp
+  music: "", // Để trống để dùng giai điệu sinh nhật instrumental tích hợp sẵn
   letter: "Mong chương mới này mang đến cho bạn niềm vui thật dịu dàng và vững chãi — niềm vui trong ánh nắng sớm, trong những tiếng cười bất chợt, và trong cảm giác được là chính mình. Cảm ơn bạn vì sự ấm áp luôn hiện diện trong mỗi nơi bạn đi qua, vì đã biến những khoảnh khắc bình thường thành những chòm sao nhỏ. Dù năm nay đưa bạn đến đâu, mong nơi đó sẽ gần hơn với tất cả những điều trái tim bạn hằng mong ước.",
   memories: [
     { image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85", caption: "Một ngày đáng để nhớ" },
