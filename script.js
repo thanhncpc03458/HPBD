@@ -32,6 +32,7 @@ gateForm.addEventListener("submit", (event) => {
   birthdayApp.setAttribute("aria-hidden", "false");
   nameGate.classList.add("hidden");
   document.body.classList.remove("gate-locked");
+  musicToggle.click();
   $("#open-surprise").focus();
 });
 gateName.addEventListener("input", () => gateError.classList.remove("show"));
@@ -86,7 +87,7 @@ const playBirthdayMelody = () => {
     oscillator.type = "sine";
     oscillator.frequency.value = frequency;
     gain.gain.setValueAtTime(0, time);
-    gain.gain.linearRampToValueAtTime(0.09, time + 0.025);
+    gain.gain.linearRampToValueAtTime(0.16, time + 0.025);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
     oscillator.connect(gain).connect(musicContext.destination);
     oscillator.start(time);
